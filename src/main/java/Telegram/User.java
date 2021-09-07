@@ -141,7 +141,7 @@ public class User extends Thread {
         keywords=new ArrayList<>();
         try {
             java.io.File localFile = new java.io.File("test"+chatId+".txt");
-        InputStream is = new URL("https://api.telegram.org/file/bot"+"1310237230:AAEUhbO4-Q7Y4-yhWRimO4uQA8Z927A8bxQ/"+file.getFilePath()).openStream();
+        InputStream is = new URL("https://api.telegram.org/file/bot"+botToken+"/"+file.getFilePath()).openStream();
         FileUtils.copyInputStreamToFile(is, localFile);
             BufferedReader reader=new BufferedReader(new FileReader(localFile));
             String s=reader.readLine();
