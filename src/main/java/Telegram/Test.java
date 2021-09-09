@@ -73,10 +73,11 @@ public class Test extends Thread {
             List<OmResponse> response = null;
             String res="";
             String dialogId = handler.execute(bot,new OmStartDialog(UserManager.getUser(chatId).app)).getDialogId();
-            for (String s : key) {
-                response=bot.sendToOmilia(handler,chatId, s);
+            for (int i = 1; i <key.size() ; i++) {
+                response=bot.sendToOmilia(handler,chatId, key.get(i));
                 System.out.println(response);
             }
+
             handler.execute(bot,new OmEndDialog(UserManager.getUser(chatId).getApp()));
             if(response!=null&&response.size()!=0){
                 for (OmResponse resp: response
@@ -95,7 +96,7 @@ public class Test extends Thread {
                 }
                 res=res.substring(0,res.length()-1);
 
-                file.fillRow(new String[]{String.valueOf(tab.replaceAll(" ","").replaceAll(",","").equalsIgnoreCase(res.replaceAll(" ","").replaceAll(",",""))),tab,res,dialogId});
+                file.fillRow(new String[]{key.get(0),String.valueOf(tab.replaceAll(" ","").replaceAll(",","").equalsIgnoreCase(res.replaceAll(" ","").replaceAll(",",""))),tab,res,dialogId});
 
             }else {
                 file.fillRow(new String[]{"false",tab,null,dialogId});

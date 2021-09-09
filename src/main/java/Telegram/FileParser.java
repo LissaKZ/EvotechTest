@@ -24,7 +24,7 @@ public class FileParser {
     private static Cell cell;
     private static Row row;
     private static final String[] labels_mode1={"КС","Диалог Id","Промпт","Статус"};
-    private static final String[] labels_mode2={"Статус","Желаемый action","Полученый action","Диалог Id"};
+    private static final String[] labels_mode2={"Номер строки в исходном файле","Статус","Желаемый action","Полученый action","Диалог Id"};
 
     private static HSSFCellStyle style;
     private static FileOutputStream outFile;

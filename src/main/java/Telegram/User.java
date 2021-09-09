@@ -111,6 +111,7 @@ public class User extends Thread {
             sheet = wb.getSheetAt(0);
             for (int i = 0; i < sheet.getLastRowNum(); i++) {
                 try {
+                    path.add(String.valueOf(i+1));
                     for (int j = 1; j < sheet.getRow(i).getLastCellNum(); j++) {
                         path.add(sheet.getRow(i).getCell(j).getStringCellValue());
                     }
