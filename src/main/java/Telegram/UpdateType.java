@@ -18,6 +18,7 @@ public enum UpdateType {
             if(update.hasMessage()){
                 try {
                     Integer.parseInt(update.getMessage().getText());
+                    if(UserManager.getUser(chatId).mode.equals("3"))
                     return true;
                 } catch (NumberFormatException e) {
                     return false;
@@ -116,7 +117,7 @@ public enum UpdateType {
                     text=text+" режим.";
                     switch (UserManager.getUser(chatId).mode) {
                         case "1":
-                            text = text + " Введите путь.";
+                            text = text + " Введите каналы в которых будет тест через пробел.";
                             break;
                         case "2":
                             text = text + " Отправьте тест кейс в формате .xls";
@@ -242,7 +243,7 @@ public enum UpdateType {
         @Override
         public boolean match(Update update) {
             if (update.hasMessage()) {
-                return UserManager.getUser(chatId).mode.equals("1") & update.getMessage().getText() != null & update.getMessage().getEntities() == null;
+                return UserManager.getUser(chatId).mode.equals("1") & update.getMessage().getText() != null & (update.getMessage().getEntities() == null||update.getMessage().getEntities().get(0).getType().equals("phone_number"))&& UserManager.getUser(chatId).getSources()!=null&& UserManager.getUser(chatId).getSources().length>0;
             }
             return false;
         }
@@ -253,7 +254,29 @@ public enum UpdateType {
             UserManager.getUser(chatId).setPath(message);
             MessageSender.sendMessage(bot,chatId,"Введите ключевые слова или отправьте их в файле .txt");
         }
-    };
+    },
+    SOURCES{
+        @Override
+        public boolean match(Update update) {
+            if (update.hasMessage()) {
+                return UserManager.getUser(chatId).mode.equals("1") & update.getMessage().getText() != null & update.getMessage().getEntities() == null;
+            }
+            return false;
+        }
+
+        @Override
+        public void handle(Bot bot, Update update) {
+            super.handle(bot, update);
+            UserManager.getUser(chatId).setSources(message);
+            String channels="";
+            for (String source:UserManager.getUser(chatId).getSources()
+                 ) {
+                channels+=" "+source;
+            }
+            MessageSender.sendMessage(bot,chatId,"Тестирование будет проходить в каналах:"+channels+". Введите путь.");
+        }
+    }
+    ;
 
     private static Long chatId;
     private static String telegramLogin;

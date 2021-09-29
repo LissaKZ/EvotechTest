@@ -61,7 +61,6 @@ public class Test extends Thread {
 
         while (UserManager.getUser(chatId).isOn()) {
             if (threadGroup.activeCount() < UserManager.getUser(chatId).getLimit()) {
-                System.out.println(threadGroup.activeCount());
                 new Dialog("t" + threadGroup.activeCount(), threadGroup, bot, chatId, UserManager.getUser(chatId).getDialog());
             }
         }
@@ -75,7 +74,6 @@ public class Test extends Thread {
             String dialogId = handler.execute(bot,new OmStartDialog(UserManager.getUser(chatId).app)).getDialogId();
             for (int i = 1; i <key.size() ; i++) {
                 response=bot.sendToOmilia(handler,chatId, key.get(i));
-                System.out.println(response);
             }
 
             handler.execute(bot,new OmEndDialog(UserManager.getUser(chatId).getApp()));
@@ -109,12 +107,16 @@ public class Test extends Thread {
     private void testInMode1() {
         for (String keyword :keywords
         ) {
-            handler = new OmiliaDialogHandler();
+
             List<OmResponse> responses;
             String prompt = "";
             String dialogId = null;
+            for (String source:UserManager.getUser(chatId).getSources()
+                 ) {
+                handler = new OmiliaDialogHandler();
+
             try {
-                dialogId = handler.execute(bot, new OmStartDialog(UserManager.getUser(chatId).getApp())).getDialogId();
+                dialogId = handler.execute(bot, new OmStartDialog(UserManager.getUser(chatId).getApp(),source)).getDialogId();
                 for (String s : path) {
                     bot.sendToOmilia(handler, chatId, s);
                 }
@@ -128,9 +130,9 @@ public class Test extends Thread {
                     }
                 }
                 if (responses != null) {
-                    file.fillRow(new String[]{keyword, dialogId, prompt, String.valueOf(targets.contains(prompt))});
+                    file.fillRow(new String[]{keyword,source, dialogId, prompt, String.valueOf(targets.contains(prompt))});
                 } else {
-                    file.fillRow(new String[]{keyword, dialogId, null, "false"});
+                    file.fillRow(new String[]{keyword,source, dialogId, null, "false"});
                 }
                 handler.execute(bot, new OmEndDialog(UserManager.getUser(chatId).getApp()));
             } catch (Exception e) {
@@ -140,6 +142,8 @@ public class Test extends Thread {
                 Command.CLEAN.executeCommand(bot, chatId, "");
                 file.fillRow(new String[]{keyword, "", "Ошибка", ""});
                 break;
+            }
+
             }
         }
     }

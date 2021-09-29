@@ -17,11 +17,11 @@ public class OmDefaultAction implements OmAction {
         requestBody.put("application_id", name);
     }
 
-
     public String asJSONString() {
         JSONObject body = new JSONObject();
-        for (Map.Entry<String, Object> a : requestBody.entrySet())
-            body.put(a.getKey(),a.getValue());
+        for (Map.Entry<String, Object> a : requestBody.entrySet()) {
+            body.put(a.getKey(), a.getValue());
+        }
         return body.toString();
     }
 }

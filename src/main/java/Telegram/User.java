@@ -25,10 +25,18 @@ public class User extends Thread {
     public boolean on;
     ArrayList<String[]> dialogs;
     private String botToken;
+    public String[] sources;
 
+    public String[] getSources() {
+        return sources;
+    }
+
+    public void setSources(String sources) {
+        String[] channels=sources.split(" ");
+        this.sources = channels;
+    }
 
     public String[] getDialog() {
-
         return dialogs.get(new Random().nextInt(dialogs.size()));
     }
 
@@ -189,6 +197,7 @@ public class User extends Thread {
         path=null;
         keywords=null;
         target=null;
+        sources=null;
     }
 
     public ArrayList<String> getPath() {

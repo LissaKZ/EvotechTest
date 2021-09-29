@@ -23,7 +23,7 @@ public class FileParser {
     private static int rownum;
     private static Cell cell;
     private static Row row;
-    private static final String[] labels_mode1={"КС","Диалог Id","Промпт","Статус"};
+    private static final String[] labels_mode1={"КС","Канал","Диалог Id","Промпт","Статус"};
     private static final String[] labels_mode2={"Номер строки в исходном файле","Статус","Желаемый action","Полученый action","Диалог Id"};
 
     private static HSSFCellStyle style;
@@ -69,7 +69,6 @@ public class FileParser {
         rownum++;
     }
     public static void fillRow(String[] data){
-        System.out.println(data[0]);
         row = sheet.createRow(rownum);
         rownum++;
         int i=0;

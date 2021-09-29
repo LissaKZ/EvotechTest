@@ -9,7 +9,6 @@ import omilia.utils.OmiliaDialogHandler;
 import java.util.List;
 
 public class Dialog extends Thread {
-
     Bot bot;
     Long chatId;
     OmiliaDialogHandler handler;
@@ -29,7 +28,7 @@ public class Dialog extends Thread {
         try {
             OmResponse responce=handler.execute(bot,new OmStartDialog(UserManager.getUser(chatId).getApp()));
             if(responce!=null) {
-                dialogId = handler.execute(bot, new OmStartDialog(UserManager.getUser(chatId).getApp())).getDialogId();
+                dialogId = responce.getDialogId();
                 try {
                     for (String s : keywords) {
                         bot.sendToOmilia(handler, chatId, s);
