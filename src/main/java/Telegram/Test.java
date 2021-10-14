@@ -113,36 +113,38 @@ public class Test extends Thread {
             String dialogId = null;
             for (String source:UserManager.getUser(chatId).getSources()
                  ) {
-                handler = new OmiliaDialogHandler();
+                if (UserManager.getUser(chatId).on) {
+                    handler = new OmiliaDialogHandler();
 
-                try {
-                    dialogId = handler.execute(bot, new OmStartDialog(UserManager.getUser(chatId).getApp(), source)).getDialogId();
-                    for (String s : path) {
-                        bot.sendToOmilia(handler, chatId, s);
-                    }
-                    responses = bot.sendToOmilia(handler, chatId, keyword);
-                    for (OmResponse response : responses
-                    ) {
-                        if (response != null) {
-                            prompt += response.getPrompt() + " ";
-                        } else {
-                            System.out.println("response is null");
+                    try {
+                        dialogId = handler.execute(bot, new OmStartDialog(UserManager.getUser(chatId).getApp(), source)).getDialogId();
+                        for (String s : path) {
+                            bot.sendToOmilia(handler, chatId, s);
                         }
+                        responses = bot.sendToOmilia(handler, chatId, keyword);
+                        for (OmResponse response : responses
+                        ) {
+                            if (response != null) {
+                                prompt += response.getPrompt() + " ";
+                            } else {
+                                System.out.println("response is null");
+                            }
+                        }
+                        if (responses != null) {
+                            file.fillRow(new String[]{keyword, source, dialogId, prompt, String.valueOf(targets.contains(prompt))});
+                        } else {
+                            file.fillRow(new String[]{keyword, source, dialogId, null, "false"});
+                        }
+                        handler.execute(bot, new OmEndDialog(UserManager.getUser(chatId).getApp()));
+                    } catch (Exception e) {
+                        MessageSender.sendMessage(bot, chatId, "Не получается получить ответ от сервера.");
+                        MessageSender.sendMessage(bot, chatId, e.toString());
+                        MessageSender.sendMessage(bot, chatId, "Проверьте доступнсть сервера, впн и название приклада");
+                        Command.CLEAN.executeCommand(bot, chatId, "");
+                        file.fillRow(new String[]{keyword, "", "Ошибка", ""});
+                        break;
                     }
-                    if (responses != null) {
-                        file.fillRow(new String[]{keyword, source, dialogId, prompt, String.valueOf(targets.contains(prompt))});
-                    } else {
-                        file.fillRow(new String[]{keyword, source, dialogId, null, "false"});
-                    }
-                    handler.execute(bot, new OmEndDialog(UserManager.getUser(chatId).getApp()));
-                } catch (Exception e) {
-                    MessageSender.sendMessage(bot, chatId, "Не получается получить ответ от сервера.");
-                    MessageSender.sendMessage(bot, chatId, e.toString());
-                    MessageSender.sendMessage(bot, chatId, "Проверьте доступнсть сервера, впн и название приклада");
-                    Command.CLEAN.executeCommand(bot, chatId, "");
-                    file.fillRow(new String[]{keyword, "", "Ошибка", ""});
-                    break;
-                }
+                }else {break;}
             }
 
             }else {
