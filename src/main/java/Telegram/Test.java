@@ -71,12 +71,15 @@ public class Test extends Thread {
             handler= new OmiliaDialogHandler();
             List<OmResponse> response = null;
             String res="";
-            String dialogId = handler.execute(bot,new OmStartDialog(UserManager.getUser(chatId).app)).getDialogId();
-            for (int i = 1; i <key.size() ; i++) {
-                response=bot.sendToOmilia(handler,chatId, key.get(i));
-            }
+            String dialogId ="";
+            if(UserManager.getUser(chatId).isOn()) {
+                dialogId = handler.execute(bot, new OmStartDialog(UserManager.getUser(chatId).app)).getDialogId();
+                for (int i = 1; i < key.size(); i++) {
+                    response = bot.sendToOmilia(handler, chatId, key.get(i));
+                }
 
-            handler.execute(bot,new OmEndDialog(UserManager.getUser(chatId).getApp()));
+                handler.execute(bot, new OmEndDialog(UserManager.getUser(chatId).getApp()));
+            }
             if(response!=null&&response.size()!=0){
                 for (OmResponse resp: response
                      ) {
@@ -107,7 +110,7 @@ public class Test extends Thread {
     private void testInMode1() {
         for (String keyword :keywords
         ) {
-            if(UserManager.getUser(chatId).on){
+            if(UserManager.getUser(chatId).isOn()){
             List<OmResponse> responses;
             String prompt = "";
             String dialogId = null;
