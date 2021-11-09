@@ -103,8 +103,6 @@ public class Test extends Thread {
                 file.fillRow(new String[]{"false",tab,null,dialogId});
             }
         });
-
-
     }
 
     private void testInMode1() {
